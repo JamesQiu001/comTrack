@@ -193,5 +193,26 @@ ylabel('Trunk Z')
 
 %Uncertainty radius for COM (from Martin + Emily)
  
-%Signal processing
+%% Signal Processing - Noise Removal
+% Obtain Complex Fourier Coefficients with FFT (Fast Fourier Transform)
+FTX = fft(trunkCentreX);
+FTY = fft(trunkCentreY);
+FTZ = fft(trunkCentreZ);
+% Divide Complex Fourier Coefficients by data point/number of measurements
+nFTX = FTX/pointNumVec;
+nFTY = FTY/pointNumVec;
+nFTZ = FTZ/pointNumVec;
+% Low Pass Filtering (Remove Complex Fourier Coefficient less than 0.9 time the Max)
+for i = 1:pointNumVec
+  if nFTX(i) < 0.9*max(nFTX)
+    nFTX(i) = 0;
+  end
+  if nFTY(i) < 0.9*max(nFTY)
+    nFTY(i) = 0;
+  end
+  if nFTZ(i) < 0.9*max(nFTZ)
+    nFTZ(i) = 0;
+  end
+end
 
+%%
